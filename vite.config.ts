@@ -1,14 +1,10 @@
 import { defineConfig } from 'vite'
-import devServer from '@hono/vite-dev-server'
+import honox from 'honox/vite'
 
-export default defineConfig({
-  plugins: [
-    devServer({
-      entry: 'app/server.ts',
-    }),
-  ],
-  base: '/vertical-writing-sandbox/',
+export default defineConfig(({ mode }) => ({
+  plugins: [honox()],
+  base: mode === 'production' ? '/vertical-writing-sandbox/' : '/',
   server: {
     port: 3000,
   },
-})
+}))

@@ -5,20 +5,24 @@
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
-    
+
+    /* JSX */
+    "jsx": "react-jsx",
+    "jsxImportSource": "hono/jsx",
+
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    
+
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src/**/*", "vite.config.ts"],
+  "include": ["src/**/*", "app/**/*", "vite.config.ts"],
   "exclude": ["node_modules", "dist"]
 }

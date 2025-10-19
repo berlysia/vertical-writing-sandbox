@@ -1,3 +1,4 @@
+import { createRoute } from 'honox/factory'
 import { Style } from 'hono/css'
 import VerticalColumnsDemo from '../../islands/VerticalColumnsDemo'
 
@@ -155,25 +156,19 @@ header p {
 }
 `
 
-export default function VerticalColumns() {
-  return (
-    <html lang="ja">
-      <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>縦書きマルチカラムデモ - スクロール親依存とビューポート依存</title>
-        <Style>{css}</Style>
-      </head>
-      <body>
-        <header>
-          <h1>縦書きマルチカラムデモ</h1>
-          <p>overflow プロパティによるカラム幅の計算基準の違いを確認できます</p>
-        </header>
+export default createRoute((c) => {
+  return c.render(
+    <div>
+      <Style>{css}</Style>
+      <header>
+        <h1>縦書きマルチカラムデモ</h1>
+        <p>overflow プロパティによるカラム幅の計算基準の違いを確認できます</p>
+      </header>
 
-        <main>
-          <VerticalColumnsDemo />
-        </main>
-      </body>
-    </html>
+      <main>
+        <VerticalColumnsDemo />
+      </main>
+    </div>,
+    { title: '縦書きマルチカラムデモ - スクロール親依存とビューポート依存' }
   )
-}
+})
