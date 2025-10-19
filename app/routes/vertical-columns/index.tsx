@@ -1,0 +1,179 @@
+import { Style } from 'hono/css'
+import VerticalColumnsDemo from '../../islands/VerticalColumnsDemo'
+
+const css = `
+body {
+  font-family: 'Hiragino Mincho Pro', 'Yu Mincho', 'YuMincho', 'HG Mincho E', serif;
+  line-height: 1.8;
+  margin: 0;
+  padding: 20px;
+  background-color: #f8f9fa;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 40px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+header h1 {
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+header p {
+  color: #6c757d;
+  font-size: 16px;
+}
+
+.demo-section {
+  margin-bottom: 40px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.demo-section h2 {
+  color: #2c3e50;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.demo-section p {
+  color: #6c757d;
+  margin-bottom: 15px;
+}
+
+.toggle-btn {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-bottom: 10px;
+  transition: background-color 0.3s;
+}
+
+.toggle-btn:hover {
+  background-color: #2980b9;
+}
+
+.status {
+  font-weight: bold;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.status.overflow-auto {
+  background-color: #e8f5e8;
+  color: #2e7d2e;
+  border: 1px solid #c3e6c3;
+}
+
+.status.overflow-visible {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeaa7;
+}
+
+.container {
+  width: 600px;
+  height: 400px;
+  border: 2px solid #dee2e6;
+  border-radius: 8px;
+  background-color: #fefefe;
+  position: relative;
+  overflow: auto;
+  transition: all 0.3s ease;
+}
+
+.container.no-overflow {
+  overflow: visible;
+}
+
+.container.overflow-auto {
+  overflow: auto;
+}
+
+.vertical-text {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  column-width: 200px;
+  column-gap: 20px;
+  column-rule: 1px solid #e9ecef;
+  padding: 20px;
+  height: 100%;
+  box-sizing: border-box;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.container:not(.no-overflow) .vertical-text {
+  height: calc(100% - 40px);
+}
+
+.content {
+  color: #2c3e50;
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 500px;
+    height: 300px;
+  }
+
+  .vertical-text {
+    column-width: 150px;
+    column-gap: 15px;
+    padding: 15px;
+    font-size: 14px;
+  }
+}
+
+.highlight {
+  animation: highlight 1s ease-in-out;
+}
+
+@keyframes highlight {
+  0% { background-color: inherit; }
+  50% { background-color: #fff3cd; }
+  100% { background-color: inherit; }
+}
+`
+
+export default function VerticalColumns() {
+  return (
+    <html lang="ja">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>縦書きマルチカラムデモ - スクロール親依存とビューポート依存</title>
+        <Style>{css}</Style>
+      </head>
+      <body>
+        <header>
+          <h1>縦書きマルチカラムデモ</h1>
+          <p>overflow プロパティによるカラム幅の計算基準の違いを確認できます</p>
+        </header>
+
+        <main>
+          <VerticalColumnsDemo />
+        </main>
+      </body>
+    </html>
+  )
+}
