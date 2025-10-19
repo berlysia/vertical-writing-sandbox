@@ -14,9 +14,15 @@
   "license": "ISC",
   "packageManager": "pnpm@10.14.0",
   "devDependencies": {
+    "@hono/vite-dev-server": "0.23.0",
     "@types/node": "^24.3.1",
     "gh-pages": "^6.3.0",
     "typescript": "^5.9.2",
-    "vite": "^7.1.5"
+    "vite": "^7.1.5",
+    "vite-tsconfig-paths": "5.1.4"
+  },
+  "dependencies": {
+    "hono": "4.10.1",
+    "honox": "0.1.49"
   }
 }

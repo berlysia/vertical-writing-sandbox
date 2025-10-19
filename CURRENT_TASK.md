@@ -24,7 +24,7 @@ Migrate the entire project to HonoX to achieve:
 ### Phase 1: Setup & Structure (In Progress)
 - [x] Create CURRENT_TASK.md for tracking
 - [x] Update project-specific .claude/CLAUDE.md with task tracking workflow
-- [ ] Install HonoX and dependencies
+- [x] Install HonoX and dependencies (hono, honox, @hono/vite-dev-server, vite-tsconfig-paths)
 - [ ] Create HonoX project structure (app/routes/, app/islands/)
 
 ### Phase 2: Route Migration
