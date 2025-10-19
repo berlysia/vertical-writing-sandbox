@@ -1,18 +1,14 @@
 import { defineConfig } from 'vite'
-import { resolve } from 'path'
+import devServer from '@hono/vite-dev-server'
 
 export default defineConfig({
-  build: {
-    rollupOptions: {
-      input: {
-        main: resolve(__dirname, 'src/pages/index/index.html'),
-        about: resolve(__dirname, 'src/pages/about/index.html'),
-      }
-    }
-  },
+  plugins: [
+    devServer({
+      entry: 'app/server.ts',
+    }),
+  ],
   base: '/vertical-writing-sandbox/',
   server: {
     port: 3000,
-    open: true
-  }
+  },
 })
