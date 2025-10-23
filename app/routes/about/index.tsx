@@ -12,7 +12,6 @@ export default createRoute((c) => {
         </ul>
       </nav>
       <p>縦書きサンドボックスのアバウトページです。</p>
-      <script type="module" dangerouslySetInnerHTML={{ __html: `console.log('縦書きサンドボックス - アバウトページ');` }} />
     </div>,
     { title: '縦書きについて' }
   )

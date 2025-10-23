@@ -11,7 +11,6 @@ export default createRoute((c) => {
           <li><a href="/vertical-columns">縦書きマルチカラムデモ</a></li>
         </ul>
       </nav>
-      <script type="module" dangerouslySetInnerHTML={{ __html: `console.log('縦書きサンドボックス - ホームページ');` }} />
     </div>,
     { title: '縦書きサンドボックス' }
   )
