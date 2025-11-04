@@ -49,7 +49,14 @@ Migrate the entire project to HonoX to achieve:
 - [x] Converted all routes to use createRoute()
 - Note: CSS inline styling needs minor fix (currently shows "undefined")
 
-### Phase 5: Cleanup
+### Phase 5: Static Site Generation Configuration ✅ (Completed)
+- [x] Configure client/server build modes in vite.config.ts
+- [x] Update build script to run client build before server build
+- [x] Fix BASE_URL configuration using mode-based approach
+- [x] Verify script tags are generated in static HTML
+- [x] Test complete build pipeline
+
+### Phase 6: Cleanup
 - [ ] Remove old src/pages/ structure
 - [ ] Update .gitignore if needed
 - [ ] Final commit with migration complete
@@ -60,24 +67,34 @@ All phases have been completed successfully. The project has been migrated from 
 - File-based routing with clean URLs
 - Islands architecture for interactive components
 - Proper colocation of routes and logic
-- SSR-ready structure
+- SSR/SSG-ready structure with working client-side hydration
+
+## Build Process
+The build now correctly handles both client and server bundles:
+1. **Client build** (`vite build --mode client`): Generates JavaScript bundles and manifest.json
+2. **Server build** (`vite build`): Generates static HTML using manifest.json for script references
+
+Generated files:
+- `dist/static/client.js` - Main client bundle
+- `dist/static/VerticalColumnsDemo-*.js` - Island component bundles
+- `dist/.vite/manifest.json` - Build manifest for asset resolution
+- `dist/*.html` - Static HTML files with proper script tags
 
 ## Known Issues
-- CSS inline styling shows "undefined" (minor cosmetic issue)
-- Port conflict (started on 3001 instead of 3000)
+None - all major issues resolved!
 
 ## Next Steps
-1. Fix CSS inline styling issue if needed
-2. Clean up old src/pages/ structure
-3. Test build process
-4. Deploy to production
+1. Clean up old src/pages/ structure
+2. Test preview server
+3. Deploy to GitHub Pages
 
 ## Notes
-- Keep assets in accessible location for all routes
-- Ensure vertical writing CSS works correctly in new structure
-- Maintain TypeScript strict mode throughout migration
+- Build order is critical: client build must run before server build to generate manifest.json
+- HonoX Script component automatically resolves paths using manifest.json
+- Base path configuration uses mode-based approach for GitHub Pages deployment
+- Islands only load client-side JavaScript on pages where they are used
 
 ---
-Last updated: 2025-10-20
-Status: Migration Complete ✅
-All routes tested and working!
+Last updated: 2025-11-05
+Status: Migration Complete with SSG ✅
+Static build with client-side hydration working!
