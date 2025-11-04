@@ -201,6 +201,7 @@ export default function VerticalColumnsDemo() {
   const [columnWidthRawValue, setColumnWidthRawValue] = useState(columnWidthJoined);
   const [useRawValue, setUseRawValue] = useState(false);
   const columnWidth = useRawValue ? columnWidthRawValue : columnWidthJoined;
+  const [showIndicators, setShowIndicators] = useState(true);
 
   // ダイアログの開閉を制御
   useEffect(() => {
@@ -271,7 +272,7 @@ export default function VerticalColumnsDemo() {
         <div style={{ height: '2px', backgroundColor: '#3498db', marginBottom: '15px' }}></div>
 
         <div class={controlGroupClass}>
-          <div class={controlLabelClass}>カラム幅の計算基準</div>
+          <div class={controlLabelClass}>カラム幅の計算基準：{useViewportMode ? 'ビューポート全体' : 'スクロールコンテナ'}</div>
           <button class={toggleBtnClass} onClick={toggleMode}>
             {useViewportMode ? 'スクロールコンテナに変更' : 'ビューポート全体に変更'}
           </button>
@@ -320,8 +321,18 @@ export default function VerticalColumnsDemo() {
           )}
         </div>
 
-        <div class={statusClass}>
-          現在: {useViewportMode ? 'ビューポート全体' : 'スクロールコンテナ'}
+        <div class={controlGroupClass}>
+          <div class={controlLabelClass}>インジケーター表示</div>
+          <div>
+            <label>
+              <input
+                type="checkbox"
+                checked={showIndicators}
+                onChange={(e) => setShowIndicators((e.target as HTMLInputElement).checked)}
+              />
+              表示する
+            </label>
+          </div>
         </div>
       </dialog>
 
@@ -330,10 +341,10 @@ export default function VerticalColumnsDemo() {
         // ビューポート全体表示
         <div class={viewportFullWrapperClass}>
           <div class={viewportFullClass}>
-            <ViewportHeightIndicator />
+            {showIndicators && <ViewportHeightIndicator />}
             <div class={textWrapperClass}>
               <div class={verticalTextBaseClass} style={{ columnWidth }}>
-               <ColumnHeightIndicator columnSize={columnWidth} columnGap="20px" columnRule="1px" />
+                {showIndicators && <ColumnHeightIndicator columnSize={columnWidth} columnGap="20px" columnRule="1px" />}
                 <TextContent />
               </div>
             </div>
@@ -343,10 +354,10 @@ export default function VerticalColumnsDemo() {
         // スクロールコンテナ表示
         <div class={scrollContainerWrapperClass}>
           <div class={scrollContainerClass}>
-            <ViewportHeightIndicator />
+            {showIndicators && <ViewportHeightIndicator />}
             <div class={textWrapperClass}>
               <div class={verticalTextBaseClass} style={{ columnWidth }}>
-                <ColumnHeightIndicator columnSize={columnWidth} columnGap="20px" columnRule="1px" />
+                {showIndicators && <ColumnHeightIndicator columnSize={columnWidth} columnGap="20px" columnRule="1px" />}
                 <TextContent />
               </div>
             </div>
