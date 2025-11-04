@@ -98,17 +98,6 @@ const controlSelectClass = css`
   }
 `
 
-const statusClass = css`
-  font-size: 13px;
-  padding: 10px 12px;
-  border-radius: 6px;
-  background-color: #e8f5e8;
-  color: #2e7d2e;
-  border: 1px solid #c3e6c3;
-  text-align: center;
-  font-weight: 500;
-`
-
 // 開閉トグルボタン
 const togglePanelBtnClass = css`
   position: fixed;
