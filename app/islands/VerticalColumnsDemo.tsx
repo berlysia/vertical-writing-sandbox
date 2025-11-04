@@ -1,6 +1,6 @@
 import { useState } from 'hono/jsx'
 import { css } from 'hono/css'
-import TextContent from '../components/TextContentPlain'
+import TextContent from '../components/TextContent'
 import { ViewportHeightIndicator } from '../components/ViewportHeightIndicator'
 import { ColumnHeightIndicator } from './ColumnHeightIndicator'
 import { ControlPanel, ControlPanelToggleButton } from '../components/ControlPanel'
