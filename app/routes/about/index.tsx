@@ -6,13 +6,13 @@ export default createRoute((c) => {
       <h1>About</h1>
       <nav>
         <ul>
-          <li><a href="/">ホーム</a></li>
+          <li><a href="/">Home</a></li>
           <li><a href="/about">About</a></li>
-          <li><a href="/vertical-columns">縦書きマルチカラムデモ</a></li>
+          <li><a href="/vertical-columns">Vertical Multi-Column Demo</a></li>
         </ul>
       </nav>
-      <p>縦書きサンドボックスのアバウトページです。</p>
+      <p>This is the about page of the Vertical Writing Sandbox.</p>
     </div>,
-    { title: '縦書きについて' }
+    { title: 'About Vertical Writing' }
   )
 })

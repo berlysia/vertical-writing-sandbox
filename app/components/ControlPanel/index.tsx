@@ -45,7 +45,7 @@ export function ControlPanel({
 }: ControlPanelProps) {
   const dialogRef = useRef<HTMLDialogElement>(null)
 
-  // ダイアログの開閉を制御
+  // Control dialog open/close state
   useEffect(() => {
     const dialog = dialogRef.current
     if (!dialog) return
@@ -57,7 +57,7 @@ export function ControlPanel({
     }
   }, [isOpen])
 
-  // バックドロップクリックで閉じる
+  // Close on backdrop click
   const handleDialogClick = (e: MouseEvent) => {
     const dialog = dialogRef.current
     if (!dialog) return
@@ -88,25 +88,25 @@ export function ControlPanel({
             padding: '0',
             lineHeight: '1',
           }}
-          aria-label="設定を閉じる"
+          aria-label="Close settings"
         >
           ×
         </button>
-        <div class={panelTitleClass} style={{ marginBottom: 0, paddingBottom: 0, borderBottom: 'none' }}>表示モード設定</div>
+        <div class={panelTitleClass} style={{ marginBottom: 0, paddingBottom: 0, borderBottom: 'none' }}>Display Mode Settings</div>
       </div>
       <div style={{ height: '2px', backgroundColor: '#3498db', marginBottom: '15px' }}></div>
 
       <div class={controlGroupClass}>
-        <div class={controlLabelClass}>カラム幅の計算基準：{useViewportMode ? 'ビューポート全体' : 'スクロールコンテナ'}</div>
+        <div class={controlLabelClass}>Column Width Basis: {useViewportMode ? 'Full Viewport' : 'Scroll Container'}</div>
         <button class={toggleBtnClass} onClick={onToggleMode}>
-          {useViewportMode ? 'スクロールコンテナに変更' : 'ビューポート全体に変更'}
+          {useViewportMode ? 'Switch to Scroll Container' : 'Switch to Full Viewport'}
         </button>
       </div>
 
       <div class={controlGroupClass}>
-        <div class={controlLabelClass}>カラム幅の指定値</div>
+        <div class={controlLabelClass}>Column Width Value</div>
         <div>
-          <label><input type="checkbox" checked={useRawValue} onChange={(e) => onUseRawValueChange((e.target as HTMLInputElement).checked)} />生の値を使用</label>
+          <label><input type="checkbox" checked={useRawValue} onChange={(e) => onUseRawValueChange((e.target as HTMLInputElement).checked)} />Use raw value</label>
         </div>
         { useRawValue ? (
           <input
@@ -147,7 +147,7 @@ export function ControlPanel({
       </div>
 
       <div class={controlGroupClass}>
-        <div class={controlLabelClass}>インジケーター表示</div>
+        <div class={controlLabelClass}>Show Indicators</div>
         <div>
           <label>
             <input
@@ -155,7 +155,7 @@ export function ControlPanel({
               checked={showIndicators}
               onChange={(e) => onShowIndicatorsChange((e.target as HTMLInputElement).checked)}
             />
-            表示する
+            Show
           </label>
         </div>
       </div>
@@ -165,7 +165,7 @@ export function ControlPanel({
 
 export function ControlPanelToggleButton({ onClick }: { onClick: () => void }) {
   return (
-    <button class={togglePanelBtnClass} onClick={onClick} aria-label="設定を開く">
+    <button class={togglePanelBtnClass} onClick={onClick} aria-label="Open settings">
       ⚙️
     </button>
   )

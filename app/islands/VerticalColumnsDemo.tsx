@@ -5,7 +5,7 @@ import { ViewportHeightIndicator } from '../components/ViewportHeightIndicator'
 import { ColumnHeightIndicator } from './ColumnHeightIndicator'
 import { ControlPanel, ControlPanelToggleButton } from '../components/ControlPanel'
 
-// ビューポート全体表示モード
+// Full viewport display mode
 const viewportFullWrapperClass = css`
 `;
 
@@ -19,7 +19,7 @@ const viewportFullClass = css`
   margin-right: auto;
 `
 
-// スクロールコンテナ表示モード
+// Scroll container display mode
 const scrollContainerWrapperClass = css`
   min-height: 100svh;
   display: flex;
@@ -40,7 +40,7 @@ const textWrapperClass = css`
   width: 100%;
 `;
 
-// 縦書きテキストの基本スタイル
+// Base styles for vertical text
 const verticalTextBaseClass = css`
   width: 100%;
   column-gap: 20px;
@@ -86,9 +86,9 @@ export default function VerticalColumnsDemo() {
         onShowIndicatorsChange={setShowIndicators}
       />
 
-      {/* テキスト表示エリア */}
+      {/* Text display area */}
       {useViewportMode ? (
-        // ビューポート全体表示
+        // Full viewport display
         <div class={viewportFullWrapperClass}>
           <div class={viewportFullClass}>
             {showIndicators && <ViewportHeightIndicator />}
@@ -101,7 +101,7 @@ export default function VerticalColumnsDemo() {
           </div>
         </div>
       ) : (
-        // スクロールコンテナ表示
+        // Scroll container display
         <div class={scrollContainerWrapperClass}>
           <div class={scrollContainerClass}>
             {showIndicators && <ViewportHeightIndicator />}

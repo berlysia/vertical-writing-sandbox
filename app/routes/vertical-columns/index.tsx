@@ -2,7 +2,7 @@ import { createRoute } from 'honox/factory'
 import { css } from 'hono/css'
 import VerticalColumnsDemo from '../../islands/VerticalColumnsDemo'
 
-// グローバルスタイル: bodyの基本設定
+// Global styles: body base settings
 const globalStyles = css`
   :-hono-global {
     * {
@@ -24,6 +24,6 @@ export default createRoute((c) => {
     <div class={globalStyles}>
       <VerticalColumnsDemo />
     </div>,
-    { title: '縦書きマルチカラムデモ' }
+    { title: 'Vertical Multi-Column Demo' }
   )
 })
