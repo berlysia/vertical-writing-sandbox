@@ -166,11 +166,7 @@ const scrollContainerClass = css`
   text-orientation: mixed;
   width: 100%;
   max-width: 640px;
-  border: 2px solid #dee2e6;
-  border-radius: 12px;
-  background-color: #fefefe;
   overflow-y: auto;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   position: relative;
 `
 
