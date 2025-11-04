@@ -1,6 +1,8 @@
 import { useState } from 'hono/jsx'
-import { css, cx } from 'hono/css'
-import TextContent from '../components/TextContent'
+import { css } from 'hono/css'
+import TextContent from '../components/TextContentPlain'
+import { ViewportHeightIndicator } from './ViewportHeightIndicator'
+import { ColumnHeightIndicator } from './ColumnHeightIndicator'
 
 // フローティングコントロールパネル
 const controlPanelClass = css`
@@ -106,17 +108,55 @@ const statusClass = css`
   font-weight: 500;
 `
 
+// 開閉トグルボタン
+const togglePanelBtnClass = css`
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1001;
+  transition: background-color 0.3s, transform 0.1s;
+
+  &:hover {
+    background-color: #2980b9;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  @media (max-width: 768px) {
+    top: 10px;
+    left: 10px;
+    width: 44px;
+    height: 44px;
+    font-size: 18px;
+  }
+`
+
 // ビューポート全体表示モード
+const viewportFullWrapperClass = css`
+`;
+
 const viewportFullClass = css`
   width: 100%;
+  max-width: 640px;
   writing-mode: vertical-rl;
   text-orientation: mixed;
   position: relative;
-  inset: auto;
   margin-left: auto;
   margin-right: auto;
-  background-color: #fefefe;
-  overflow: auto;
 `
 
 // スクロールコンテナ表示モード
@@ -125,7 +165,6 @@ const scrollContainerWrapperClass = css`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f8f9fa;
 `
 
 const scrollContainerClass = css`
@@ -140,53 +179,30 @@ const scrollContainerClass = css`
   overflow-y: auto;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   position: relative;
-
-  @media (max-width: 768px) {
-    width: 100%;
-    height: 70vh;
-  }
 `
+
+const paddingColorizerClass = css`
+  width: 100%;
+  background-color: #84ffc1;
+`;
 
 // 縦書きテキストの基本スタイル
 const verticalTextBaseClass = css`
-  width: 100%;
+  postion: relative;
+  width: calc(100% - 40px);
   column-gap: 20px;
   column-rule: 1px solid #e9ecef;
-  padding: 40px;
-  box-sizing: border-box;
-  font-size: 16px;
   line-height: 1.8;
   color: #2c3e50;
+  background-color: #fefefe;
 `;
 
-function ColumnHeightIndicator({ columnSize, columnGap, columnRule }: { columnSize: string, columnGap: string, columnRule: string }) {
-  // repeating-linear-gradientで繰り返しパターンを生成
-  // 縦書きマルチカラムでは、カラムは上から下に並ぶため、
-  // グラデーションも縦方向（to bottom）に進める
-  return (
-    <div
-      style={{
-        position: 'absolute',
-        insetInlineStart: "40px",
-        insetBlockStart: "40px",
-        inlineSize: '100%', // 縦方向（上から下）に伸ばす
-        blockSize: '2px', // 横方向の太さ
-        backgroundImage: `repeating-linear-gradient(
-          to bottom,
-          blue 0,
-          blue ${columnSize},
-          #fd2 ${columnSize},
-          #fd2 calc(${columnSize} + ${columnGap} + ${columnRule} )
-        )`,
-        pointerEvents: 'none',
-      }}
-    />
-  )
-}
-
 export default function VerticalColumnsDemo() {
+  // コントロールパネルの開閉状態
+  const [isPanelOpen, setIsPanelOpen] = useState(true)
+
   // true = ビューポート全体, false = スクロールコンテナ
-  const [useViewportMode, setUseViewportMode] = useState(false)
+  const [useViewportMode, setUseViewportMode] = useState(true)
   const [columnWidthUnit, setColumnWidthUnit] = useState('px')
   const [columnWidthValue, setColumnWidthValue] = useState(200)
   const columnWidthJoined = `${columnWidthValue}${columnWidthUnit}`
@@ -196,14 +212,39 @@ export default function VerticalColumnsDemo() {
 
   const toggleMode = () => {
     setUseViewportMode(!useViewportMode)
-    console.log(`Display mode changed to: ${!useViewportMode ? 'viewport' : 'scroll container'}`)
+  }
+
+  const togglePanel = () => {
+    setIsPanelOpen(!isPanelOpen)
   }
 
   return (
     <>
-      {/* フローティングコントロールパネル */}
-      <div class={controlPanelClass}>
-        <div class={panelTitleClass}>表示モード設定</div>
+      {isPanelOpen ? (
+        <button class={togglePanelBtnClass} onClick={togglePanel} aria-label="設定を開く">
+          ⚙️
+        </button>
+      ) :  (
+        <div class={controlPanelClass}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <button
+              onClick={togglePanel}
+              style={{
+                background: 'none',
+                border: 'none',
+                fontSize: '24px',
+                cursor: 'pointer',
+                color: '#6c757d',
+                padding: '0',
+                lineHeight: '1',
+              }}
+              aria-label="設定を閉じる"
+            >
+              ×
+            </button>
+            <div class={panelTitleClass} style={{ marginBottom: 0, paddingBottom: 0, borderBottom: 'none' }}>表示モード設定</div>
+          </div>
+          <div style={{ height: '2px', backgroundColor: '#3498db', marginBottom: '15px' }}></div>
 
         <div class={controlGroupClass}>
           <div class={controlLabelClass}>カラム幅の計算基準</div>
@@ -253,24 +294,33 @@ export default function VerticalColumnsDemo() {
         <div class={statusClass}>
           現在: {useViewportMode ? 'ビューポート全体' : 'スクロールコンテナ'}
         </div>
-      </div>
+        </div>
+      )}
 
       {/* テキスト表示エリア */}
       {useViewportMode ? (
         // ビューポート全体表示
-        <div class={viewportFullClass}>
-          <ColumnHeightIndicator columnSize={columnWidth} columnGap="20px" columnRule="1px" />
-          <div class={verticalTextBaseClass} style={{ columnWidth }}>
-            <TextContent />
+        <div class={viewportFullWrapperClass}>
+          <div class={viewportFullClass}>
+            <ViewportHeightIndicator />
+            <div class={paddingColorizerClass}>
+              <div class={verticalTextBaseClass} style={{ columnWidth }}>
+               <ColumnHeightIndicator columnSize={columnWidth} columnGap="20px" columnRule="1px" />
+                <TextContent />
+              </div>
+            </div>
           </div>
         </div>
       ) : (
         // スクロールコンテナ表示
         <div class={scrollContainerWrapperClass}>
           <div class={scrollContainerClass}>
-            <ColumnHeightIndicator columnSize={columnWidth} columnGap="20px" columnRule="1px" />
-            <div class={verticalTextBaseClass} style={{ columnWidth }}>
-              <TextContent />
+            <ViewportHeightIndicator />
+            <div class={paddingColorizerClass}>
+              <div class={verticalTextBaseClass} style={{ columnWidth }}>
+                <ColumnHeightIndicator columnSize={columnWidth} columnGap="20px" columnRule="1px" />
+                <TextContent />
+              </div>
             </div>
           </div>
         </div>

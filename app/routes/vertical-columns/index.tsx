@@ -11,9 +11,10 @@ const globalStyles = css`
     body {
       font-family: 'Hiragino Mincho Pro', 'Yu Mincho', 'YuMincho', 'HG Mincho E', serif;
       line-height: 1.8;
+      font-size: 16px;
       margin: 0;
       padding: 0;
-      background-color: #f8f9fa;
+      background-color: #9b9b9bff;
     }
   }
 `
