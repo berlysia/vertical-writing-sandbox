@@ -1,27 +1,28 @@
-import { useState } from 'hono/jsx'
+import { useState, useEffect, useRef } from 'hono/jsx'
 import { css } from 'hono/css'
 import TextContent from '../components/TextContentPlain'
-import { ViewportHeightIndicator } from './ViewportHeightIndicator'
+import { ViewportHeightIndicator } from '../components/ViewportHeightIndicator'
 import { ColumnHeightIndicator } from './ColumnHeightIndicator'
 
-// フローティングコントロールパネル
+// フローティングコントロールパネル（Dialog要素）
 const controlPanelClass = css`
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  background-color: rgba(255, 255, 255, 0.95);
+  background-color: rgba(255, 255, 255, 0.8);
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  z-index: 1000;
+  border: none;
   min-width: 280px;
-  backdrop-filter: blur(10px);
+  max-width: 90vw;
+
+  margin-block-end: 20px;
+
+  &::backdrop {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
 
   @media (max-width: 768px) {
-    top: 10px;
-    right: 10px;
-    left: 10px;
     min-width: auto;
+    width: calc(100vw - 40px);
   }
 `
 
@@ -111,11 +112,15 @@ const statusClass = css`
 // 開閉トグルボタン
 const togglePanelBtnClass = css`
   position: fixed;
-  top: 20px;
-  left: 20px;
-  background-color: #3498db;
+  bottom: 64px;
+  left: 0;
+  right: 0;
+  margin-top: auto;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #fefefe;
+  border: 2px solid #3498db;
   color: white;
-  border: none;
   width: 48px;
   height: 48px;
   border-radius: 50%;
@@ -161,7 +166,7 @@ const viewportFullClass = css`
 
 // スクロールコンテナ表示モード
 const scrollContainerWrapperClass = css`
-  min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -170,9 +175,8 @@ const scrollContainerWrapperClass = css`
 const scrollContainerClass = css`
   writing-mode: vertical-rl;
   text-orientation: mixed;
-  width: 80%;
-  max-width: 800px;
-  height: 80vh;
+  width: 100%;
+  max-width: 640px;
   border: 2px solid #dee2e6;
   border-radius: 12px;
   background-color: #fefefe;
@@ -181,15 +185,13 @@ const scrollContainerClass = css`
   position: relative;
 `
 
-const paddingColorizerClass = css`
+const textWrapperClass = css`
   width: 100%;
-  background-color: #84ffc1;
 `;
 
 // 縦書きテキストの基本スタイル
 const verticalTextBaseClass = css`
-  postion: relative;
-  width: calc(100% - 40px);
+  width: 100%;
   column-gap: 20px;
   column-rule: 1px solid #e9ecef;
   line-height: 1.8;
@@ -199,7 +201,8 @@ const verticalTextBaseClass = css`
 
 export default function VerticalColumnsDemo() {
   // コントロールパネルの開閉状態
-  const [isPanelOpen, setIsPanelOpen] = useState(true)
+  const [isPanelOpen, setIsPanelOpen] = useState(false)
+  const dialogRef = useRef<HTMLDialogElement>(null)
 
   // true = ビューポート全体, false = スクロールコンテナ
   const [useViewportMode, setUseViewportMode] = useState(true)
@@ -210,41 +213,73 @@ export default function VerticalColumnsDemo() {
   const [useRawValue, setUseRawValue] = useState(false);
   const columnWidth = useRawValue ? columnWidthRawValue : columnWidthJoined;
 
+  // ダイアログの開閉を制御
+  useEffect(() => {
+    const dialog = dialogRef.current
+    if (!dialog) return
+
+    if (isPanelOpen && !dialog.open) {
+      dialog.showModal()
+    } else if (!isPanelOpen && dialog.open) {
+      dialog.close()
+    }
+  }, [isPanelOpen])
+
   const toggleMode = () => {
     setUseViewportMode(!useViewportMode)
   }
 
-  const togglePanel = () => {
-    setIsPanelOpen(!isPanelOpen)
+  const openPanel = () => {
+    setIsPanelOpen(true)
+  }
+
+  const closePanel = () => {
+    setIsPanelOpen(false)
+  }
+
+  // バックドロップクリックで閉じる
+  const handleDialogClick = (e: MouseEvent) => {
+    const dialog = dialogRef.current
+    if (!dialog) return
+
+    const rect = dialog.getBoundingClientRect()
+    const clickedInDialog =
+      rect.top <= e.clientY &&
+      e.clientY <= rect.top + rect.height &&
+      rect.left <= e.clientX &&
+      e.clientX <= rect.left + rect.width
+
+    if (!clickedInDialog) {
+      closePanel()
+    }
   }
 
   return (
     <>
-      {isPanelOpen ? (
-        <button class={togglePanelBtnClass} onClick={togglePanel} aria-label="設定を開く">
-          ⚙️
-        </button>
-      ) :  (
-        <div class={controlPanelClass}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <button
-              onClick={togglePanel}
-              style={{
-                background: 'none',
-                border: 'none',
-                fontSize: '24px',
-                cursor: 'pointer',
-                color: '#6c757d',
-                padding: '0',
-                lineHeight: '1',
-              }}
-              aria-label="設定を閉じる"
-            >
-              ×
-            </button>
-            <div class={panelTitleClass} style={{ marginBottom: 0, paddingBottom: 0, borderBottom: 'none' }}>表示モード設定</div>
-          </div>
-          <div style={{ height: '2px', backgroundColor: '#3498db', marginBottom: '15px' }}></div>
+      <button class={togglePanelBtnClass} onClick={openPanel} aria-label="設定を開く">
+        ⚙️
+      </button>
+
+      <dialog ref={dialogRef} class={controlPanelClass} onClick={handleDialogClick}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <button
+            onClick={closePanel}
+            style={{
+              background: 'none',
+              border: 'none',
+              fontSize: '24px',
+              cursor: 'pointer',
+              color: '#6c757d',
+              padding: '0',
+              lineHeight: '1',
+            }}
+            aria-label="設定を閉じる"
+          >
+            ×
+          </button>
+          <div class={panelTitleClass} style={{ marginBottom: 0, paddingBottom: 0, borderBottom: 'none' }}>表示モード設定</div>
+        </div>
+        <div style={{ height: '2px', backgroundColor: '#3498db', marginBottom: '15px' }}></div>
 
         <div class={controlGroupClass}>
           <div class={controlLabelClass}>カラム幅の計算基準</div>
@@ -267,26 +302,31 @@ export default function VerticalColumnsDemo() {
             />
           ) : (
             <>
-              <input
-                type="number"
-                class={controlInputClass}
-                value={columnWidthValue}
-                onChange={(e) => setColumnWidthValue(Number((e.target as HTMLInputElement).value))}
-              />
-              <select
-                class={controlSelectClass}
-                value={columnWidthUnit}
-                onChange={(e) => setColumnWidthUnit((e.target as HTMLSelectElement).value)}
-              >
-                <option value="px">px</option>
-                <option value="cqh">cqh</option>
-                <option value="vh">vh</option>
-                <option value="dvh">dvh</option>
-                <option value="svh">svh</option>
-                <option value="lvh">lvh</option>
-                <option value="em">em</option>
-                <option value="rem">rem</option>
-              </select>
+              <div>
+                <input
+                  type="number"
+                  class={controlInputClass}
+                  value={columnWidthValue}
+                  onChange={(e) => setColumnWidthValue(Number((e.target as HTMLInputElement).value))}
+                />
+                <select
+                  class={controlSelectClass}
+                  value={columnWidthUnit}
+                  onChange={(e) => setColumnWidthUnit((e.target as HTMLSelectElement).value)}
+                >
+                  <option value="px">px</option>
+                  <option value="cqh">cqh</option>
+                  <option value="vh">vh</option>
+                  <option value="dvh">dvh</option>
+                  <option value="svh">svh</option>
+                  <option value="lvh">lvh</option>
+                  <option value="em">em</option>
+                  <option value="rem">rem</option>
+                </select>
+              </div>
+              <div>
+                <input type="range" min="50" max="1000" value={columnWidthValue} onChange={(e) => setColumnWidthValue(Number((e.target as HTMLInputElement).value))} style={{width: "100%"}} />
+              </div>
             </>
           )}
         </div>
@@ -294,8 +334,7 @@ export default function VerticalColumnsDemo() {
         <div class={statusClass}>
           現在: {useViewportMode ? 'ビューポート全体' : 'スクロールコンテナ'}
         </div>
-        </div>
-      )}
+      </dialog>
 
       {/* テキスト表示エリア */}
       {useViewportMode ? (
@@ -303,7 +342,7 @@ export default function VerticalColumnsDemo() {
         <div class={viewportFullWrapperClass}>
           <div class={viewportFullClass}>
             <ViewportHeightIndicator />
-            <div class={paddingColorizerClass}>
+            <div class={textWrapperClass}>
               <div class={verticalTextBaseClass} style={{ columnWidth }}>
                <ColumnHeightIndicator columnSize={columnWidth} columnGap="20px" columnRule="1px" />
                 <TextContent />
@@ -316,7 +355,7 @@ export default function VerticalColumnsDemo() {
         <div class={scrollContainerWrapperClass}>
           <div class={scrollContainerClass}>
             <ViewportHeightIndicator />
-            <div class={paddingColorizerClass}>
+            <div class={textWrapperClass}>
               <div class={verticalTextBaseClass} style={{ columnWidth }}>
                 <ColumnHeightIndicator columnSize={columnWidth} columnGap="20px" columnRule="1px" />
                 <TextContent />
