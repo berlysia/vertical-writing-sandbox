@@ -2,16 +2,6 @@ import { css } from 'hono/css';
 import { useEffect, useRef, useState } from 'hono/jsx';
 import { HeightBar } from './HeightBar';
 
-const containerClass = css`
-  position: absolute;
-  left: 120px;
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  pointer-events: none;
-  writing-mode: horizontal-tb;
-`;
-
 const indicatorClass = css`
   position: absolute;
   inline-size: 100%;
