@@ -12,8 +12,12 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "packageManager": "pnpm@10.14.0",
+  "license": "MIT",
+  "packageManager": "pnpm@10.20.0",
+  "engines": {
+    "node": ">=24.11.0",
+    "pnpm": ">=10.20.0"
+  },
   "devDependencies": {
     "@hono/vite-dev-server": "0.23.0",
     "@types/node": "^24.3.1",
