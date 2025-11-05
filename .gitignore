@@ -42,4 +42,5 @@ pids
 # Temporary folders
 tmp/
 temp/
+.tmp/
 .playwright-mcp/
