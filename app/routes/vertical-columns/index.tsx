@@ -15,6 +15,7 @@ const globalStyles = css`
       margin: 0;
       padding: 0;
       background-color: #9b9b9bff;
+      text-size-adjust: 100%;
     }
   }
 `
